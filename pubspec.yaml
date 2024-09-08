@@ -1,14 +1,29 @@
-name: horario_escolar
-description: Um aplicativo para exibir o horário de aulas da 2ªIM01-SGT
-version: 1.0.0+1
-
-environment:
-  sdk: ">=2.12.0 <3.0.0"
-
-dependencies:
-  flutter:
-    sdk: flutter
-  intl: ^0.17.0
-
-flutter:
-  uses-material-design: true
+workflows:
+  flutter-workflow:
+    name: Horário Aulas
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      vars:
+        FLUTTER_VERSION: stable
+        ANDROID_HOME: /opt/android-sdk
+    scripts:
+      - name: Install dependencies
+        script: |
+          flutter pub get
+      - name: Build Android
+        script: |
+          flutter build apk --release
+      - name: Build iOS
+        script: |
+          flutter build ios --release
+    artifacts:
+      - build/**/outputs/**/*.apk
+      - build/ios/ipa/*.ipa
+ 
+publishing:
+  email:
+    recipients:
+      - seu-email@dominio.com
